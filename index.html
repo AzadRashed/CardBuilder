@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+	<title>Dynamic Layout</title>
+</head>
+
+<body>
+	<section class="m-5 p-5">
+		<div class="row">
+			<div class="col-md-9 mb-4 mb-md-0">
+				<div class="row">
+					<div class="col-md-12">
+						<section class="border p-4 d-flex justify-content-center mb-4 bg-light">
+							<div class="card">
+								<div class="card-body"></div>
+							</div>
+						</section>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<pre id="outputCode"></pre>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3 mb-4 mb-md-0">
+				<div class="card">
+					<div class="card-body">
+						<div class="text-center">
+							<button type="reset" class="btn btn-primary mb-4" id="resetBtn">Reset</button>
+							<a class="btn btn-primary mb-4" href="https://mdbootstrap.com/docs/standard/tools/builders/cards/"
+								role="button">Docs</a>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="titleCheckbox" />
+							<label class="form-check-label" for="titleCheckbox">Title</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="textCheckbox" />
+							<label class="form-check-label" for="textCheckbox"> Text </label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="buttonCheckbox" />
+							<label class="form-check-label" for="buttonCheckbox">Button</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="imageCheckbox" />
+							<label class="form-check-label" for="imageCheckbox">Image</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="headerCheckbox" />
+							<label class="form-check-label" for="headerCheckbox">Header</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="footerCheckbox" />
+							<label class="form-check-label" for="footerCheckbox">Footer</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="centerCheckbox" />
+							<label class="form-check-label" for="centerCheckbox">Center</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="borderCheckbox" />
+							<label class="form-check-label" for="borderCheckbox">Border</label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="checkbox" value="" id="textWhiteCheckbox" />
+							<label class="form-check-label" for="textWhiteCheckbox">White text</label>
+						</div>
+						<p class="text-center mb-2 mt-3">Custom color</p>
+						<input type="color" class="form-control form-control-color w-100 mb-4" id="colorInput"
+							title="Choose your color" value="#ffffff" />
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+		integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+		crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+		integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+		crossorigin="anonymous"></script>
+
+	<script src="http://lovasoa.github.io/tidy-html5/tidy.js"></script>
+
+	<script>
+		options = {
+			"indent": "auto",
+			"indent-spaces": 2,
+			"wrap": 800,
+			"markup": true,
+			"output-xml": false,
+			"numeric-entities": true,
+			"quote-marks": true,
+			"quote-nbsp": false,
+			"show-body-only": true,
+			"quote-ampersand": false,
+			"break-before-br": true,
+			"uppercase-tags": false,
+			"uppercase-attributes": false,
+			
+			"tidy-mark": false,
+		};
+
+		// Store the color value to replace
+		let colorVal = "#fff";
+
+		let resetButton = document.getElementById("resetBtn");
+
+		let cardImage = document.getElementById("imageCheckbox");
+		let cardTitle = document.getElementById("titleCheckbox");
+		let cardText = document.getElementById("textCheckbox");
+		let cardButton = document.getElementById("buttonCheckbox");
+		let cardHeader = document.getElementById("headerCheckbox");
+		let cardFooter = document.getElementById("footerCheckbox");
+
+		let cardCenter = document.getElementById("centerCheckbox");
+		let cardBorder = document.getElementById("borderCheckbox");
+		let cardWhiteText = document.getElementById("textWhiteCheckbox");
+
+		let cardColor = document.getElementById("colorInput");
+
+		let cardElement = document.querySelector(".card");
+		let cardBody = document.querySelector(".card .card-body"); // cardElement.firstElementChild;
+
+		function titleToggled(e) {
+			if (e.srcElement.checked) {
+				let titleHeader = document.createElement("h5");
+				titleHeader.classList.add("card-title");
+
+				let cardTitleText = document.createTextNode("Card title");
+				titleHeader.appendChild(cardTitleText);
+
+				cardBody.insertBefore(titleHeader, cardBody.firstChild);
+			} else {
+				document.querySelector(".card .card-body .card-title").remove();
+			}
+			codeChangedHandle();
+		}
+
+		function textToggled(e) {
+			if (e.srcElement.checked) {
+				let cardTextElement = document.createElement("p");
+				cardTextElement.classList.add("card-text");
+
+				let cardTextElementText = document.createTextNode(
+					"Some quick example text to build on the card title and make up the bulk of the card's content."
+				);
+				cardTextElement.appendChild(cardTextElementText);
+
+				if (cardButton.checked && !cardTitle.checked) {
+					cardBody.insertBefore(cardTextElement, cardBody.firstChild);
+				} else if(cardButton.checked && cardTitle.checked) {
+                    cardBody.insertBefore(cardTextElement, cardBody.children[1]);
+                } else {
+					cardBody.appendChild(cardTextElement);
+				}
+			} else {
+				document.querySelector(".card .card-body p").remove();
+			}
+			codeChangedHandle();
+		}
+
+		function buttonToggled(e) {
+			if (e.srcElement.checked) {
+				let buttonElement = document.createElement("button");
+				buttonElement.classList.add("btn");
+				buttonElement.classList.add("btn-primary");
+
+				let buttonElementText = document.createTextNode("Button");
+				buttonElement.appendChild(buttonElementText);
+
+				cardBody.appendChild(buttonElement);
+			} else {
+				document.querySelector(".card .card-body button").remove();
+			}
+
+			codeChangedHandle();
+		}
+        
+
+		function imageToggled(e) {
+			if (e.srcElement.checked) {
+				let imageElement = document.createElement("img");
+				imageElement.classList.add("img-fluid");
+				imageElement.src = "https://mdbcdn.b-cdn.net/img/new/standard/nature/111.webp";
+				cardElement.insertBefore(imageElement, cardElement.firstChild);
+			} else {
+				document.querySelector(".card  img ").remove();
+			}
+
+			codeChangedHandle();
+		}
+
+		function headerToggled(e) {
+			if (e.srcElement.checked) {
+				let cardHeaderElement = document.createElement("div");
+				cardHeaderElement.classList.add("card-header");
+
+				let cardHeaderElementText = document.createTextNode("Featured");
+				cardHeaderElement.appendChild(cardHeaderElementText);
+
+				if (cardImage.checked) {
+					cardElement.insertBefore(cardHeaderElement, cardElement.children[1]);
+				} else {
+					cardElement.insertBefore(cardHeaderElement, cardElement.firstChild);
+				}
+			} else {
+				document.querySelector(".card .card-header").remove();
+			}
+
+			codeChangedHandle();
+		}
+
+		function footerToggled(e) {
+			if (e.srcElement.checked) {
+				let footerDiv = document.createElement("div");
+				footerDiv.id = "cardFooterElement";
+				footerDiv.classList.add("card-footer");
+
+				let footerDivText = document.createTextNode("2 Days ago");
+				footerDiv.appendChild(footerDivText);
+
+				cardElement.appendChild(footerDiv);
+			} else {
+				document.getElementById("cardFooterElement").remove();
+			}
+
+			codeChangedHandle();
+		}
+
+		function cardCenterToggled(e) {
+			// if (e.srcElement.checked) {
+			// 	cardElement.classList.add("text-center");
+			// } else {
+			// 	cardElement.classList.remove("text-center");
+			// }
+            cardElement.classList.toggle("text-center");
+			codeChangedHandle();
+		}
+
+		function cardBorderToggled(e) {
+            cardElement.classList.toggle("border");
+            cardElement.classList.toggle("border-primary");
+			codeChangedHandle();
+        }
+		
+
+		function whiteTextToggled(e) {
+			
+            cardElement.classList.toggle("text-white");
+			codeChangedHandle();
+		}
+
+		function colorInputChanged(e) {
+			cardElement.style.backgroundColor = e.srcElement.value;
+			codeChangedHandle();
+		}
+
+		function resetButtonClicked() {
+			let checkboxs = [
+				cardTitle, cardText, cardButton, cardImage, cardHeader, cardFooter,
+				cardCenter, cardBorder, cardWhiteText
+			];
+
+			for (let checkbox of checkboxs) {
+				if (checkbox.checked) {
+					checkbox.click();
+				}
+			}
+
+			// Color reset
+			cardElement.style.backgroundColor = "";
+			cardColor.value = "#ffffff";
+
+			// Initially show some elements
+			cardTitle.checked = false;
+			cardText.checked = false;
+
+			cardTitle.click();
+			cardText.click();
+
+			codeChangedHandle();
+		}
+
+		function codeChangedHandle() {
+			let contents = tidy_html5(cardElement.outerHTML, options);
+			contents = contents.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+			document.getElementById("outputCode").innerHTML = contents;
+		}
+
+		/* Assign listener's */
+		cardTitle.addEventListener("click", titleToggled, false);
+		cardText.addEventListener("click", textToggled, false);
+		cardButton.addEventListener("click", buttonToggled, false);
+		cardImage.addEventListener("click", imageToggled, false);
+		cardHeader.addEventListener("click", headerToggled, false);
+		cardFooter.addEventListener("click", footerToggled, false);
+		cardCenter.addEventListener("click", cardCenterToggled, false);
+		cardBorder.addEventListener("click", cardBorderToggled, false);
+		cardWhiteText.addEventListener("click", whiteTextToggled, false);
+
+		cardColor.addEventListener("change", colorInputChanged, false);
+
+		resetButton.addEventListener("click", resetButtonClicked, false);
+
+		// Reset everything at first
+		resetButtonClicked();
+	</script>
+</body>
+
+</html>
